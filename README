@@ -1,3 +1,27 @@
+Demonstration how to integrate MacWire ver 0.1 in Play! 2.1
+to leverage code brevity and type-safety offered by this excellent dependency injection library by @adamwarski.
+
+It is a refactored version of a sample shipped with Play! 2.1 distribution.
+The original application is terribly hard-wired and I've made no attempt to fix it more than the demo required.
+
+Comparing to the original, the main controller (controllers.Application), formerly a singleton, became a class.
+The class takes a constructor parameter (models.CompanyList), which gets wired differently in the Main- and Test- modules.
+How the module is selected is up to application developer, in this example decision is being made basing on a system property.
+
+To see the difference in wiring, first run the application normally, and then with:
+  play -Dmacwire-test-mode=yes run
+
+- the differing part is in the computer adding form, where you choose the company from a dropdown.
+
+
+Feel free to use it and improve upon this early-stage proof-of-concept
+and leverage power of Scala macros in dependency injection. Have fun
+Przemysław Pokrywka
+@przemekpokrywka
+
+
+Original description:
+---------------------
 This is a classic CRUD application, backed by a JDBC database. It demonstrates:
 
 - Accessing a JDBC database, using Anorm.

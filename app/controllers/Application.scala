@@ -13,7 +13,7 @@ import models._
 /**
  * Manage a database of computers
  */
-object Application extends Controller { 
+class Application(companyList: CompanyList) extends Controller {
   
   /**
    * This result directly redirect to the application home.
@@ -61,7 +61,7 @@ object Application extends Controller {
    */
   def edit(id: Long) = Action {
     Computer.findById(id).map { computer =>
-      Ok(html.editForm(id, computerForm.fill(computer), Company.options))
+      Ok(html.editForm(id, computerForm.fill(computer), companyList.options))
     }.getOrElse(NotFound)
   }
   
@@ -72,7 +72,7 @@ object Application extends Controller {
    */
   def update(id: Long) = Action { implicit request =>
     computerForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.editForm(id, formWithErrors, Company.options)),
+      formWithErrors => BadRequest(html.editForm(id, formWithErrors, companyList.options)),
       computer => {
         Computer.update(id, computer)
         Home.flashing("success" -> "Computer %s has been updated".format(computer.name))
@@ -84,7 +84,7 @@ object Application extends Controller {
    * Display the 'new computer form'.
    */
   def create = Action {
-    Ok(html.createForm(computerForm, Company.options))
+    Ok(html.createForm(computerForm, companyList.options))
   }
   
   /**
@@ -92,7 +92,7 @@ object Application extends Controller {
    */
   def save = Action { implicit request =>
     computerForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.createForm(formWithErrors, Company.options)),
+      formWithErrors => BadRequest(html.createForm(formWithErrors, companyList.options)),
       computer => {
         Computer.insert(computer)
         Home.flashing("success" -> "Computer %s has been created".format(computer.name))

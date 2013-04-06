@@ -159,7 +159,11 @@ object Computer {
   
 }
 
-object Company {
+trait CompanyList {
+  def options: Seq[(String,String)]
+}
+
+object Company extends CompanyList {
     
   /**
    * Parse a Company from a ResultSet
