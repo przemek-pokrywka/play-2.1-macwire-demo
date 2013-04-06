@@ -110,3 +110,4 @@ class Application(companyList: CompanyList) extends Controller {
 
 }
             
+object Application extends Application(Company)
