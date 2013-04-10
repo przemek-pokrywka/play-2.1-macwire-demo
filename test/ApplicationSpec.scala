@@ -4,13 +4,14 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import org.specs2.mock.Mockito
 
-class ApplicationSpec extends Specification {
+class ApplicationSpec extends Specification with Mockito {
   
   import models._
 
   // -- Date helpers
-  
+
   def dateIs(date: java.util.Date, str: String) = new java.text.SimpleDateFormat("yyyy-MM-dd").format(date) == str
   
   // --
@@ -28,13 +29,14 @@ class ApplicationSpec extends Specification {
     
     "list computers on the the first page" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-        
-        val result = controllers.Application.list(0, 2, "")(FakeRequest())
+        val computers = mock[models.ComputerList]
+        computers.list(anyInt, anyInt, anyInt, anyString) returns Page[(Computer, Option[Company])](Nil, 0, 0, 42)
+
+        val result = new controllers.Application(null, computers).list(0, 2, "")(FakeRequest())
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain("574 computers found")
-        
-      }      
+        contentAsString(result) must contain("42 computers found")
+      }
     }
     
     "filter computer by name" in {

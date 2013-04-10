@@ -13,7 +13,9 @@ import models._
 /**
  * Manage a database of computers
  */
-class Application(companyList: CompanyList) extends Controller {
+class Application(
+                   companyList: CompanyList,
+                   computerList: ComputerList) extends Controller {
   
   /**
    * This result directly redirect to the application home.
@@ -49,7 +51,7 @@ class Application(companyList: CompanyList) extends Controller {
    */
   def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
     Ok(html.list(
-      Computer.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      computerList.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
     ))
   }
@@ -110,4 +112,4 @@ class Application(companyList: CompanyList) extends Controller {
 
 }
             
-object Application extends Application(Company)
+object Application extends Application(Company, Computer)

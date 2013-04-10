@@ -19,7 +19,15 @@ case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
   lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
 }
 
-object Computer {
+trait ComputerList {
+  def findById(id: Long): Option[Computer]
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Computer, Option[Company])]
+  def update(id: Long, computer: Computer)
+  def insert(computer: Computer)
+  def delete(id: Long)
+}
+
+object Computer extends ComputerList {
   
   // -- Parsers
   
@@ -105,7 +113,7 @@ object Computer {
    * @param id The computer id
    * @param computer The computer values.
    */
-  def update(id: Long, computer: Computer) = {
+  def update(id: Long, computer: Computer) {
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -128,12 +136,12 @@ object Computer {
    *
    * @param computer The computer values.
    */
-  def insert(computer: Computer) = {
+  def insert(computer: Computer) {
     DB.withConnection { implicit connection =>
       SQL(
         """
           insert into computer values (
-            (select next value for computer_seq), 
+            (select next value for computer_seq),
             {name}, {introduced}, {discontinued}, {company_id}
           )
         """
@@ -145,18 +153,18 @@ object Computer {
       ).executeUpdate()
     }
   }
-  
+
   /**
    * Delete a computer.
    *
    * @param id Id of the computer to delete.
    */
-  def delete(id: Long) = {
+  def delete(id: Long) {
     DB.withConnection { implicit connection =>
       SQL("delete from computer where id = {id}").on('id -> id).executeUpdate()
     }
   }
-  
+
 }
 
 trait CompanyList {

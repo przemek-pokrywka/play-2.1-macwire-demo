@@ -5,11 +5,13 @@ trait MainModule extends MacwireControllerCache {
   import com.softwaremill.macwire.MacwireMacros._
 
   lazy val companyList: models.CompanyList = models.Company
+  lazy val computerList: models.ComputerList = models.Computer
 
   // Note: controllers must not be lazy to be saved in cache
   val appController = registerController(wire[controllers.Application])
 }
 
+object MainModule extends MainModule
 
 // We can override the default settings freely
 trait TestModule extends MainModule {
@@ -20,6 +22,7 @@ trait TestModule extends MainModule {
   }
 }
 
+object TestModule extends TestModule
 
 // MacwirePlayControllerWiring is responsible for controller creation
 object Global extends MacwirePlayControllerWiring {
@@ -27,8 +30,8 @@ object Global extends MacwirePlayControllerWiring {
   // We have freedom in how we set up the application
   // - in this example we simply use a system property
   val module = if (System.getProperty("macwire-test-mode", "no") == "yes")
-    new TestModule() {}
+    TestModule
   else 
-    new MainModule() {} 
+    MainModule
 
 }
