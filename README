@@ -1,6 +1,9 @@
 Demonstration how to integrate MacWire ver 0.1 in Play! 2.1
 to leverage code brevity and type-safety offered by this excellent dependency injection library by @adamwarski.
 
+This way of integration is obsolete. Use rather the approach from http://www.warski.org/blog/2013/08/dependency-injection-in-play-with-macwire/ instead.
+
+If you're still reading it, well...
 It is a refactored version of a sample shipped with Play! 2.1 distribution.
 The original application is terribly hard-wired and I've made no attempt to fix it more than the demo required.
 
